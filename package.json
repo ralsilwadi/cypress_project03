@@ -1,15 +1,21 @@
 {
-  "name": "cypress_project03",
+  "name": "cypress-e2e-9",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx cypress run",
+    "test:open": "npx cypress open",
+    "test:config": "npm run test:specific -- --browser chrome --config viewportHeight=720,viewportWidth=1080 --headed",
+    "test:specific": "npx cypress run --spec \"cypress/e2e/integration/11-CustomCommands.cy.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "devDependencies": {
-    "cypress": "^13.10.0"
+    "@4tw/cypress-drag-drop": "^2.2.5",
+    "cypress": "^13.9.0",
+    "cypress-real-events": "^1.12.0",
+    "dotenv": "^16.4.5"
   }
 }

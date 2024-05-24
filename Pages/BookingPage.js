@@ -51,23 +51,21 @@ class BookingPage {
     );
   }
 
-  
-
   /* Methods */
   clickBook() {
     this.getBookButton().click();
   }
 
   clickOneWay() {
-    this.getOneWay().children().click();
+    this.getOneWay().children().first().click();
   }
 
   clickRoundTrip() {
-    this.getRoundTrip().children().click();
+    this.getRoundTrip().children().first().click();
   }
 
   clickRadioButton(index) {
-    this.getSpecificRadioButton(index).children().click();
+    this.getSpecificRadioButton(index).children().first().click();
   }
 
   selectSpecificDropdown(index, choice) {

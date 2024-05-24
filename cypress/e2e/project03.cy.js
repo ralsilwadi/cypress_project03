@@ -8,53 +8,37 @@ describe("Book Your Trip Form Tests", () => {
     cy.clickCard("Project - Booking Function");
   });
 
-  const threeToFive = [ // 3 objects within an array to use .forEach function on test cases 3-5
+  const threeToFive = [
     {
       description: "Validate the booking for 1 passenger and one way",
       radio: 0,
-      cabinClass: "Business",
-      from: "Illinois",
-      to: "Florida",
-      passengerNum: '1',
-      passengerOne: 'Senior (65+)',
+      cabinClass: [0, "Business"],
+      from: [1, "Illinois"],
+      to: [2, "Florida"],
+      passengerNum: [3, '1'],
+      passengers: ['Senior (65+)'],
     },
     {
       description: "Validate the booking for 1 passenger and round trip",
       radio: 1,
-      cabinClass: "First",
-      from: "California",
-      to: "Illinois",
-      passengerNum: '1',
-      passengerOne: 'Adult (16-64)',
+      cabinClass: [0, "First"],
+      from: [1, "California"],
+      to: [2, "Illinois"],
+      passengerNum: [3, '1'],
+      passengers: ['Adult (16-64)'],
     },
     {
       description: "Validate the booking for 2 passengers and one way",
       radio: 0,
-      cabinClass: "Premium Economy",
-      from: "New York",
-      to: "Texas",
-      passengerNum: '2',
-      passengerOne: 'Adult (16-64)',
-      passengerTwo: 'Child (2-11)',
-      
+      cabinClass: [0, "Premium Economy"],
+      from: [1, "New York"],
+      to: [2, "Texas"],
+      passengerNum: [3, '2'],
+      passengers: ['Adult (16-64)', 'Child (2-11)'],
     },
-
   ];
 
-  it("Test Case 01 - Validate the default Book your trip form", () => {
-    // Validate radio buttons
-    bookingPage
-      .getOneWay()
-      .should("be.visible")
-      .children()
-      .should("be.checked");
-    bookingPage
-      .getRoundTrip()
-      .should("be.visible")
-      .children()
-      .should("not.be.checked");
-
-    // Validate visibility of labels, dropdowns, and date pickers
+  const validateVisibility = () => {
     bookingPage.getLabels().each(($el) => {
       cy.wrap($el).should("be.visible");
     });
@@ -64,12 +48,21 @@ describe("Book Your Trip Form Tests", () => {
     bookingPage.getDatePickers().each(($el) => {
       cy.wrap($el).should("be.visible");
     });
+  };
 
-    // Validate default values of dropdowns
-    bookingPage.getDropdowns().eq(3).should("have.value", "1");
-    bookingPage.getDropdowns().eq(4).should("have.value", "Adult (16-64)");
+  const validateDefaultValues = () => {
+    bookingPage.getSpecificDropdown(3).should("have.value", "1");
+    bookingPage.getSpecificDropdown(4).should("have.value", "Adult (16-64)");
+  };
 
-    // Validate book button
+  it("Test Case 01 - Validate the default Book your trip form", () => {
+    bookingPage.getOneWay().should("be.visible").children().should("be.checked");
+    bookingPage.getRoundTrip().should("be.visible").children().should("not.be.checked");
+
+    validateVisibility();
+
+    validateDefaultValues();
+
     bookingPage.getBookButton().should("be.visible").and("be.enabled");
   });
 
@@ -77,30 +70,22 @@ describe("Book Your Trip Form Tests", () => {
     bookingPage.clickRoundTrip();
     bookingPage.getOneWay().children().should("not.be.checked");
 
-    // Validate visibility of labels, dropdowns, and date pickers
-    bookingPage.getLabelsDropsAndDates().each(($el) => {
-      cy.wrap($el).should("be.visible");
-    });
+    validateVisibility();
 
-    // Validate default values of dropdowns
-    bookingPage.getSpecificDropdown(3).should("have.value", "1");
-    bookingPage.getSpecificDropdown(4).should("have.value", "Adult (16-64)");
+    validateDefaultValues();
 
-    // Validate book button
     bookingPage.getBookButton().should("be.visible").and("be.enabled");
   });
 
   threeToFive.forEach((test, index) => {
     it(`Test Case 0${index + 3} - ${test.description}`, () => {
-
+      bookingPage.clickRadioButton(test.radio);
+      bookingPage.selectSpecificDropdown(...test.cabinClass);
+      bookingPage.selectSpecificDropdown(...test.from);
+      bookingPage.selectSpecificDropdown(...test.to);
+      bookingPage.selectSpecificDropdown(...test.passengerNum);
+      bookingPage.setPassengers(test.passengers)
+      bookingPage.clickBook()
     });
   });
-
-  // it("Test Case 03 - Validate the booking for 1 passenger and one way", () => {
-
-  // });
-
-  // it("Test Case 04 - Validate the booking for 1 passenger and round trip", () => {});
-
-  // it("Test Case 05 - Validate the booking for 2 passengers and one way", () => {});
 });

@@ -1,69 +1,83 @@
+/// <reference types="cypress"/>
 class BookingPage {
-
   /* Locators */
   getRadioButtons() {
-    return cy.get('.radio')
+    return cy.get(".radio");
   }
 
   getSpecificRadioButton(index) {
-    return cy.get('.radio').eq(index)
+    return this.getRadioButtons().eq(index);
   }
 
   getOneWay() {
-    return cy.get('.radio').eq(0)
+    return this.getRadioButtons().eq(0);
   }
 
   getRoundTrip() {
-    return cy.get('.radio').eq(1)
+    return this.getRadioButtons().eq(1);
   }
 
   getLabels() {
-    return cy.get('.label')
+    return cy.get(".label");
   }
 
   getSpecificLabel(index) {
-    return cy.get('.label').eq(index)
+    return this.getLabels().eq(index);
   }
 
   getDropdowns() {
-    return cy.get('.select select')
+    return cy.get(".select select");
   }
 
   getSpecificDropdown(index) {
-    return cy.get('.select select').eq(index)
+    return this.getDropdowns().eq(index);
   }
 
   getDatePickers() {
-    return cy.get('.react-datepicker__input-container > input')
+    return cy.get(".react-datepicker__input-container > input");
   }
 
   getSpecificDatePicker(index) {
-    return cy.get('.react-datepicker__input-container > input').eq(index)
+    return this.getDatePickers().eq(index);
   }
 
   getBookButton() {
-    return cy.get('.Button_c_button__TmkRS')
+    return cy.get(".Button_c_button__TmkRS");
   }
 
   getLabelsDropsAndDates() {
-    return cy.get('.react-datepicker__input-container > input, .select select, .label')
+    return cy.get(
+      ".react-datepicker__input-container > input, .select select, .label"
+    );
   }
-
 
   /* Methods */
   clickBook() {
-    this.getBookButton().realClick()
+    this.getBookButton().click();
   }
 
   clickOneWay() {
-    this.getOneWay().children().realClick()
+    this.getOneWay().children().click();
   }
-  
+
   clickRoundTrip() {
-    this.getRoundTrip().children().realClick()
+    this.getRoundTrip().children().click();
   }
 
+  clickRadioButton(index) {
+    this.getSpecificRadioButton(index).children().click();
+  }
 
+  selectSpecificDropdown(index, choice) {
+    this.getSpecificDropdown(index).select(choice);
+  }
+
+  setPassengers(passengers) {
+    passengers.forEach((passenger, index) => {
+      const dropdownIndex = 4 + index;
+      this.selectSpecificDropdown(dropdownIndex, passenger);
+    });
+  }
 }
 
-export default BookingPage
+export default BookingPage;

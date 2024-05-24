@@ -51,6 +51,8 @@ class BookingPage {
     );
   }
 
+  
+
   /* Methods */
   clickBook() {
     this.getBookButton().click();

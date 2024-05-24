@@ -14,27 +14,33 @@ describe("Book Your Trip Form Tests", () => {
       radio: 0,
       cabinClass: [0, "Business"],
       from: [1, "Illinois"],
+      fromAbv: 'IL',
       to: [2, "Florida"],
-      passengerNum: [3, '1'],
-      passengers: ['Senior (65+)'],
+      toAbv: 'FL',
+      passengerNum: [3, "1"],
+      passengers: ["Senior (65+)"],
     },
     {
       description: "Validate the booking for 1 passenger and round trip",
       radio: 1,
       cabinClass: [0, "First"],
       from: [1, "California"],
+      fromAbv: 'CA',
       to: [2, "Illinois"],
-      passengerNum: [3, '1'],
-      passengers: ['Adult (16-64)'],
+      toAbv: 'IL',
+      passengerNum: [3, "1"],
+      passengers: ["Adult (16-64)"],
     },
     {
       description: "Validate the booking for 2 passengers and one way",
       radio: 0,
       cabinClass: [0, "Premium Economy"],
       from: [1, "New York"],
+      fromAbv: 'NY',
       to: [2, "Texas"],
-      passengerNum: [3, '2'],
-      passengers: ['Adult (16-64)', 'Child (2-11)'],
+      toAbv: 'TX',
+      passengerNum: [3, "2"],
+      passengers: ["Adult (16-64)", "Child (2-11)"],
     },
   ];
 
@@ -56,8 +62,16 @@ describe("Book Your Trip Form Tests", () => {
   };
 
   it("Test Case 01 - Validate the default Book your trip form", () => {
-    bookingPage.getOneWay().should("be.visible").children().should("be.checked");
-    bookingPage.getRoundTrip().should("be.visible").children().should("not.be.checked");
+    bookingPage
+      .getOneWay()
+      .should("be.visible")
+      .children()
+      .should("be.checked");
+    bookingPage
+      .getRoundTrip()
+      .should("be.visible")
+      .children()
+      .should("not.be.checked");
 
     validateVisibility();
 
@@ -84,8 +98,21 @@ describe("Book Your Trip Form Tests", () => {
       bookingPage.selectSpecificDropdown(...test.from);
       bookingPage.selectSpecificDropdown(...test.to);
       bookingPage.selectSpecificDropdown(...test.passengerNum);
-      bookingPage.setPassengers(test.passengers)
-      bookingPage.clickBook()
+      bookingPage.setPassengers(test.passengers);
+      bookingPage.clickBook();
+      
+      cy.contains('DEPART').should('be.visible')
+      cy.contains(`${test.fromAbv} to ${test.toAbv}`).should('be.visible')
+      cy.contains(`Number of Passengers: ${test.passengerNum[1]}`).should('be.visible')
+      test.passengers.forEach((passenger, index) => {
+        cy.contains(`Passenger ${index + 1}: ${passenger}`).should('be.visible')
+      })
+      cy.contains(`Cabin class: ${test.cabinClass[1]}`).should('be.visible')
+      
+      if (test.radio === 1) {
+        cy.contains('RETURN').should('be.visible')
+        cy.contains(`${test.toAbv} to ${test.fromAbv}`).should('be.visible')
+      }
     });
   });
 });

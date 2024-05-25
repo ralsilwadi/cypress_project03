@@ -107,7 +107,7 @@ describe("Book Your Trip Form Tests", () => {
       
       cy.contains('DEPART').should('be.visible')
       cy.contains(`${test.fromAbv} to ${test.toAbv}`).should('be.visible')
-      cy.contains(bookingPage.getDepartDate(false)).should('be.visible')
+      cy.contains(bookingPage.getDate('depart' , false)).should('be.visible')
       cy.contains(`Number of Passengers: ${test.passengerNum[1]}`).should('be.visible')
       test.passengers.forEach((passenger, index) => {
         cy.contains(`Passenger ${index + 1}: ${passenger}`).should('be.visible')
@@ -117,7 +117,7 @@ describe("Book Your Trip Form Tests", () => {
       if (test.radio === 1) {
         cy.contains('RETURN').should('be.visible')
         cy.contains(`${test.toAbv} to ${test.fromAbv}`).should('be.visible')
-        cy.contains(bookingPage.getReturnDate(false)).should('be.visible')
+        cy.contains(bookingPage.getDate('return', false)).should('be.visible')
       }
     });
   });

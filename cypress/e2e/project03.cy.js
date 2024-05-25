@@ -43,6 +43,7 @@ describe("Book Your Trip Form Tests", () => {
       passengers: ["Adult (16-64)", "Child (2-11)"],
     },
   ];
+  
 
   const validateVisibility = () => {
     bookingPage.getLabels().each(($el) => {
@@ -60,6 +61,7 @@ describe("Book Your Trip Form Tests", () => {
     bookingPage.getSpecificDropdown(3).should("have.value", "1");
     bookingPage.getSpecificDropdown(4).should("have.value", "Adult (16-64)");
   };
+
 
   it("Test Case 01 - Validate the default Book your trip form", () => {
     bookingPage
@@ -97,12 +99,15 @@ describe("Book Your Trip Form Tests", () => {
       bookingPage.selectSpecificDropdown(...test.cabinClass);
       bookingPage.selectSpecificDropdown(...test.from);
       bookingPage.selectSpecificDropdown(...test.to);
+      bookingPage.typeDepartDate()
+      if (test.radio === 1) bookingPage.typeReturnDate()
       bookingPage.selectSpecificDropdown(...test.passengerNum);
       bookingPage.setPassengers(test.passengers);
       bookingPage.clickBook();
       
       cy.contains('DEPART').should('be.visible')
       cy.contains(`${test.fromAbv} to ${test.toAbv}`).should('be.visible')
+      cy.contains(bookingPage.getDepartDate(false)).should('be.visible')
       cy.contains(`Number of Passengers: ${test.passengerNum[1]}`).should('be.visible')
       test.passengers.forEach((passenger, index) => {
         cy.contains(`Passenger ${index + 1}: ${passenger}`).should('be.visible')
@@ -112,6 +117,7 @@ describe("Book Your Trip Form Tests", () => {
       if (test.radio === 1) {
         cy.contains('RETURN').should('be.visible')
         cy.contains(`${test.toAbv} to ${test.fromAbv}`).should('be.visible')
+        cy.contains(bookingPage.getReturnDate(false)).should('be.visible')
       }
     });
   });

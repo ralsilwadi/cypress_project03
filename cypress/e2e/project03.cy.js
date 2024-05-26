@@ -109,9 +109,11 @@ describe("Book Your Trip Form Tests", () => {
       cy.contains(`${test.fromAbv} to ${test.toAbv}`).should('be.visible')
       cy.contains(bookingPage.getDate('depart' , false)).should('be.visible')
       cy.contains(`Number of Passengers: ${test.passengerNum[1]}`).should('be.visible')
+
       test.passengers.forEach((passenger, index) => {
         cy.contains(`Passenger ${index + 1}: ${passenger}`).should('be.visible')
       })
+      
       cy.contains(`Cabin class: ${test.cabinClass[1]}`).should('be.visible')
       
       if (test.radio === 1) {
